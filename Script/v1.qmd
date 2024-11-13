@@ -8,4 +8,7 @@ execute:
   message: false 
   warning: false
 editor: visual
+bibliography: references.bib
 ---
+
+[@cioè-peña2020]
