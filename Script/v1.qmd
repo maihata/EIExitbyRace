@@ -10,5 +10,31 @@ execute:
 editor: visual
 bibliography: references.bib
 ---
+```{r}
+library(tidyverse)
+library(here)
+library(rio)
+library(rio)
+library(knitr)
+library(gt)
+library(DT)
+library(reactable)
+library(gtsummary)
+library(kableExtra)
+library(tinytex)
+```
 
-[@cioè-peña2020]
+```{r}
+byrace <- import(here("Data", "race v.2.xlsx"))
+```
+
+```{r}
+
+```
+
+
+Abstract: According to [@cioè-peña2020] 
+
+\newpage
+
+# References 
