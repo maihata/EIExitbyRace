@@ -1,5 +1,11 @@
 ---
 title: "FP1"
+author: "Maiko Hata & Michelle Cui"
 format: html
+execute: 
+  eval: true 
+  echo: false
+  message: false 
+  warning: false
 editor: visual
 ---
