@@ -27,7 +27,7 @@ library(janitor)
 
 ```
 
-```{r}
+```{r include=FALSE}
 byrace <- import(here("Data", "race v.2.xlsx")) %>% 
   clean_names() %>% 
   select(-7, -12) %>% 
