@@ -2,6 +2,7 @@
 title: "FP1"
 author: "Maiko Hata & Michelle Cui"
 format: html
+csl: apa.csl
 execute: 
   eval: true 
   echo: false
@@ -44,7 +45,7 @@ str(byrace)
 ```
 
 
-Abstract: According to [@cioè-peña2020] 
+Abstract: According to [@cioè-peña2020], to do intext citation [-@cioè-peña2020]
 
 \newpage
 
