@@ -22,13 +22,24 @@ library(reactable)
 library(gtsummary)
 library(kableExtra)
 library(tinytex)
+library(janitor)
+
 ```
 
 ```{r}
-byrace <- import(here("Data", "race v.2.xlsx"))
+byrace <- import(here("Data", "race v.2.xlsx")) %>% 
+  clean_names() %>% 
+  select(-7, -12) %>% 
+  mutate(complete_or_not_eligible = complete_prior_to_reaching_max_age_for_part_c + not_eligible_for_part_b_exit_with_no_referrals + not_eligible_for_part_b_exit_with_referrals_to_other_programs)
+
+
+str(byrace)
+
+           
 ```
 
 ```{r}
+
 
 ```
 
