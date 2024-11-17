@@ -11,6 +11,7 @@ execute:
 editor: visual
 bibliography: references.bib
 ---
+
 ```{r}
 library(tidyverse)
 library(here)
@@ -44,9 +45,8 @@ str(byrace)
 
 ```
 
-
 Abstract: According to [@cioè-peña2020], to do intext citation [-@cioè-peña2020]
 
 \newpage
 
-# References 
+# References
