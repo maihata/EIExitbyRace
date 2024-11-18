@@ -37,33 +37,78 @@ byrace <- import(here("Data", "race v.2.xlsx")) %>%
 str(byrace)
 ```
 
-# Introduction 
+```{r}
+agg_by_race_and_state <- byrace %>% 
+  group_by(race, area) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            withdrawal_by_parent = sum(withdrawal_by_parent))
 
-The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant program that supports states in providing Early Intervention (EI) services for children zero to two who experience developmental delays and/or disabilities (Early Childhood Technical Assistance Center, 2023). These EI services incorporate family-centered practices, aiming to support caregivers' understanding of their children to provide the most effective support for their development (Romano, 2006). However, racially and/or linguistically minoritized children are less likely than White, English speaking monolingual children to receive EI services (Morgan et al., 2012). 
+chisq.test(agg_by_race_and_state[, 3:4])
+```
 
-The IDEA Section 618 requires that the data is collected on children who had an active IFSP who stopped receiving services, or “exited” EI services (U.S. Department of Education [DOE], 2024a). Recent data revealed that racially and/or linguistically marginalized infants and toddlers are much more likely to leave EI services via disqualification from EI services due to non-response to agencies’ outreach efforts after they had been made eligible. The purpose of this study is to explore the patterns in which families from racially and/or linguistically marginalized communities leave EI services.
+```{r}
+agg_by_area <- byrace %>% 
+  group_by(area) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            withdrawal_by_parent = sum(withdrawal_by_parent))
+chisq.test(agg_by_area[, 2:3])
+
+```
+
+```{r}
+data_oregon <- byrace %>% 
+  filter(area == "Oregon") %>% 
+  group_by(race) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            withdrawal_by_parent = sum(withdrawal_by_parent)) %>% 
+  mutate(proportion = withdrawal_by_parent / exit_total)
+chisq.test(data_oregon[, 2:3])
+
+```
+
+```{r}
+data_national <- byrace %>% 
+  filter(area == "US and Outlying Areas") %>% 
+  group_by(race) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            withdrawal_by_parent = sum(withdrawal_by_parent)) %>% 
+  mutate(proportion = withdrawal_by_parent / exit_total)
+chisq.test(data_oregon[, 2:3])
+```
+
+
+<p style="font-family: times, serif; font-size:11pt; font-style:italic">
+
+Introduction
+
+</p>
+
+The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant program that supports states in providing Early Intervention (EI) services for children zero to two who experience developmental delays and/or disabilities (Early Childhood Technical Assistance Center, 2023). These EI services incorporate family-centered practices, aiming to support caregivers' understanding of their children to provide the most effective support for their development (Romano, 2006). However, racially and/or linguistically minoritized children are less likely than White, English speaking monolingual children to receive EI services (Morgan et al., 2012).
+
+The IDEA Section 618 requires that the data is collected on children who had an active IFSP who stopped receiving services, or “exited” EI services (U.S. Department of Education \[DOE\], 2024a). Recent data revealed that racially and/or linguistically marginalized infants and toddlers are much more likely to leave EI services via disqualification from EI services due to non-response to agencies’ outreach efforts after they had been made eligible. The purpose of this study is to explore the patterns in which families from racially and/or linguistically marginalized communities leave EI services.
 
 # **Methods**
-This project examined extant data on EI service exit from 2013-2022, which was obtained online from the Office of Special Education Services (OSEP, 2024). The goal of this study was to understand associations between children's race and exit reasons, which then was compared to the data from Oregon which was also obtained from OSEP (2024). Nationally, ___ children's exit data were included, while ___ children's data were included in the dataset from Oregon. 
 
-Variables: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White), and ten DVs that were collapsed into 6 categories: 
+This project examined extant data on EI service exit from 2013-2022, which was obtained online from the Office of Special Education Services (OSEP, 2024). The goal of this study was to understand associations between children's race and exit reasons, which then was compared to the data from Oregon which was also obtained from OSEP (2024). Nationally, \_\_\_ children's exit data were included, while \_\_\_ children's data were included in the dataset from Oregon.
 
-* Attempts to contact unsuccessful 
-* Complete/not eligible for Part B
-* Moved out of state 
-* Part B eligibility not determined
-* Part B eligible 
-* Withdrawal by parent 
+Variables: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White), and ten DVs that were collapsed into 6 categories:
 
-Preparatory work: As the original datasets from OSEP contained dependent variables that are not relevant, the following preparatory work took place: 
+-   Attempts to contact unsuccessful
+-   Complete/not eligible for Part B
+-   Moved out of state
+-   Part B eligibility not determined
+-   Part B eligible
+-   Withdrawal by parent
 
-1. Created an Excel sheet with national and Oregon data only 
-2. Imported Excel sheet into RStudio
-3. Deleted two DVs that are beyond the scope of this study 
-4. Combined three similar DVs into one 
-5. Collapsed multiple years into one aggregated data
+Preparatory work: As the original datasets from OSEP contained dependent variables that are not relevant, the following preparatory work took place:
 
-Data Analysis: We used chi-square(X2) goodness of fit test/an inferential statistical test to understand associations between children's race in relation to their exit reasons. We used fundamental statistical functions and ran chi-square goodness of fit test to test our null-hypothesis, which was that there was no associations between IVs and DVs. 
+1.  Created an Excel sheet with national and Oregon data only
+2.  Imported Excel sheet into RStudio
+3.  Deleted two DVs that are beyond the scope of this study
+4.  Combined three similar DVs into one
+5.  Collapsed multiple years into one aggregated data
+
+Data Analysis: We used chi-square(X2) goodness of fit test/an inferential statistical test to understand associations between children's race in relation to their exit reasons. We used fundamental statistical functions and ran chi-square goodness of fit test to test our null-hypothesis, which was that there was no associations between IVs and DVs.
 
 # Results
 
