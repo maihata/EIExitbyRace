@@ -43,7 +43,7 @@ agg_by_race_and_state <- byrace %>%
   summarize(exit_total = sum(exiting_total2), 
             withdrawal_by_parent = sum(withdrawal_by_parent))
 
-chisq.test(agg_by_race_and_state[, 3:4])
+# chisq.test(agg_by_race_and_state[, 3:4])
 ```
 
 ```{r}
@@ -51,7 +51,7 @@ agg_by_area <- byrace %>%
   group_by(area) %>% 
   summarize(exit_total = sum(exiting_total2), 
             withdrawal_by_parent = sum(withdrawal_by_parent))
-chisq.test(agg_by_area[, 2:3])
+# chisq.test(agg_by_area[, 2:3])
 
 ```
 
@@ -62,7 +62,7 @@ data_oregon <- byrace %>%
   summarize(exit_total = sum(exiting_total2), 
             withdrawal_by_parent = sum(withdrawal_by_parent)) %>% 
   mutate(proportion = withdrawal_by_parent / exit_total)
-chisq.test(data_oregon[, 2:3])
+# chisq.test(data_oregon[, 2:3])
 
 ```
 
@@ -73,15 +73,12 @@ data_national <- byrace %>%
   summarize(exit_total = sum(exiting_total2), 
             withdrawal_by_parent = sum(withdrawal_by_parent)) %>% 
   mutate(proportion = withdrawal_by_parent / exit_total)
-chisq.test(data_oregon[, 2:3])
+
+#chisq.test(data_oregon[, 2:3])
 ```
 
 
-<p style="font-family: times, serif; font-size:11pt; font-style:italic">
-
-Introduction
-
-</p>
+# Introduction
 
 The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant program that supports states in providing Early Intervention (EI) services for children zero to two who experience developmental delays and/or disabilities (Early Childhood Technical Assistance Center, 2023). These EI services incorporate family-centered practices, aiming to support caregivers' understanding of their children to provide the most effective support for their development (Romano, 2006). However, racially and/or linguistically minoritized children are less likely than White, English speaking monolingual children to receive EI services (Morgan et al., 2012).
 
