@@ -25,6 +25,7 @@ library(gtsummary)
 library(kableExtra)
 library(tinytex)
 library(janitor)
+library(tidylog)
 
 ```
 
@@ -76,7 +77,6 @@ data_national <- byrace %>%
 
 #chisq.test(data_oregon[, 2:3])
 ```
-
 
 # Introduction
 
