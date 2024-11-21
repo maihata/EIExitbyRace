@@ -41,10 +41,47 @@ str(byrace)
 agg_by_race_and_state <- byrace %>% 
   group_by(race, area) %>% 
   summarize(exit_total = sum(exiting_total2), 
-            withdrawal_by_parent = sum(withdrawal_by_parent))
+            withdrawal_by_parent = sum(withdrawal_by_parent),
+            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful),
+            moved_out_of_state = sum(moved_out_of_state),
+            part_b_eligible_exiting_part_c = sum(part_b_eligible_exiting_part_c),
+            complete_or_not_eligible = sum(complete_or_not_eligible))
 
-# chisq.test(agg_by_race_and_state[, 3:4])
+race_oregon <- agg_by_race_and_state %>%
+  filter(area == "Oregon")
+
+race_us <- agg_by_race_and_state %>% 
+  filter(area == "US and Outlying Areas")
+
+chisq.test(race_us[, 3:8])
+chisq.test(race_oregon[, 3:8])
+
+race_oregon_subset <- race_oregon %>% 
+  filter(race != "PI")
+chisq.test(race_oregon_subset[, 3:8])
 ```
+
+
+```{r}
+#table
+
+oregon_data_long <- race_oregon %>% 
+  pivot_longer(
+    cols = 4:8,
+    values_to = "values",
+    names_to = "names"
+  ) %>% 
+  group_by(race) %>% 
+  mutate(percentage = round(values/exit_total, digits = 2))
+
+oregon_data_wide <- oregon_data_long %>% 
+  select(-c(exit_total,values)) %>% 
+  pivot_wider(
+    names_from = names,
+    values_from = percentage
+  )
+```
+
 
 ```{r}
 agg_by_area <- byrace %>% 
