@@ -59,6 +59,8 @@ library(kableExtra)
 library(tinytex)
 library(janitor)
 library(tidylog)
+library(sjPlot)
+library(lme4)
 
 ```
 
@@ -116,6 +118,14 @@ oregon_data_wide <- oregon_data_long %>%
     names_from = names,
     values_from = percentage
   )
+```
+
+```{r}
+ggplot(oregon_data_long, 
+  aes(x = race, y = percentage, fill = race)) +  
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  facet_wrap(~ names)
 ```
 
 ```{r}
