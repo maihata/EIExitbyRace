@@ -45,7 +45,7 @@ Data Analysis: We used chi-square(X2) goodness of fit test/an inferential statis
 
 As you can see...
 
-```{r}
+```{r include=FALSE}
 library(tidyverse)
 library(here)
 library(rio)
