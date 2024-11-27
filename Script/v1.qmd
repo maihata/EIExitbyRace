@@ -74,8 +74,27 @@ byrace <- import(here("Data", "race v.2.xlsx")) %>%
   select(-7, -12) %>% 
   mutate(complete_or_not_eligible = complete_prior_to_reaching_max_age_for_part_c + not_eligible_for_part_b_exit_with_no_referrals + not_eligible_for_part_b_exit_with_referrals_to_other_programs)
 
-str(byrace)
+# str(byrace) I think we can remove this because it is only for examining the structure
 ```
+
+```{r}
+#| labs: exit-total
+# Do we need to use this table to report the white and black students percentage? Or we can show the result using an inline code in the Results section
+
+percentage_by_race <- byrace %>% 
+  filter(area == "US and Outlying Areas") %>% 
+  group_by(race) %>% 
+  summarize(
+    total_exit = sum(exiting_total2),
+    .groups = "drop"
+    ) %>% 
+  mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
+percentage_by_race %>% 
+  gt()
+
+```
+
+
 
 ```{r}
 # aggregated by race and stte
@@ -260,7 +279,7 @@ us_data_DQ <- byrace %>%
   filter(area == "US and Outlying Areas") %>% 
   group_by(race) %>% 
   summarize(exit_total = sum(exiting_total2), 
-            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful)) 
+            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful))
 ```
 
 ```{r}
