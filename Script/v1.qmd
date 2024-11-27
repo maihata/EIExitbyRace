@@ -16,34 +16,36 @@ bibliography: references.bib
 
 The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant program that supports states in providing Early Intervention (EI) services for children zero to two who experience developmental delays and/or disabilities (Early Childhood Technical Assistance Center, 2023). These EI services incorporate family-centered practices, aiming to support caregivers' understanding of their children to provide the most effective support for their development (Romano, 2006). However, racially and/or linguistically minoritized children are less likely than White, English speaking monolingual children to receive EI services [@morgan2012].
 
-The IDEA Section 618 requires that the data is collected on children who had an active IFSP who stopped receiving services, or “exited” EI services (U.S. Department of Education \[DOE\], 2024a). Recent data revealed that racially and/or linguistically marginalized infants and toddlers are much more likely to leave EI services via disqualification from EI services due to non-response to agencies’ outreach efforts after they had been made eligible. The purpose of this study is to explore the patterns in which families from racially and/or linguistically marginalized communities leave EI services.
+The IDEA Section 618 requires that the data is collected on children who had an active IFSP who stopped receiving services, or “exited” EI services (U.S. Department of Education \[DOE\], 2024). Recent data revealed that racially and/or linguistically marginalized infants and toddlers are much more likely to leave EI services via disqualification from EI services due to non-response to agencies’ outreach efforts after they had been made eligible. The purpose of this study is to explore the patterns in which families from racially and/or linguistically marginalized communities leave EI services.
 
 # **Methods**
 
-This project examined extant data on EI service exit from 2013-2022, which was obtained online from the Office of Special Education Services (OSEP, 2024). The goal of this study was to understand associations between children's race and exit reasons, which then was compared to the data from Oregon which was also obtained from OSEP (2024). Nationally, 3,310,559 children's exit data were included, while 29,945 children's data were included in the dataset from Oregon.
+This project examined extant data on EI service exit from 2013-2022, which was obtained online from the Office of Special Education Services (OSEP, 2024). The goal of this study was to understand associations between children's race and exit reasons, which then was compared to the data from Oregon which was also obtained from OSEP (2024).
 
 Variables: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White), and ten DVs that were collapsed into 6 categories:
 
--   Attempts to contact unsuccessful
--   Withdrawal by parent
--   Complete/not eligible for Part B
--   Moved out of state
--   Part B eligibility not determined
--   Part B eligible
+-   Attempts to contact unsuccessful (DQ)
+-   Withdrawal by parent (Withdrawal)
+-   Complete/not eligible for Part B (Complete or Not Eligible)
+-   Moved out of state (Moved Out)
+-   Part B eligibility not determined (Eligibility Not Determined)
+-   Part B eligible (Eligible)
 
-Preparatory work: As the original data sets from OSEP contained dependent variables that are not relevant, the following preparatory work took place:
+Preparatory work: As the original data sets from OSEP contained dependent variables that are beyond the scope of this study (e.g. "deceased"), we prepared the data specified below:
 
-1.  Created an Excel sheet with national and Oregon data only
+1.  Created an Excel sheet from the national and Oregon datasets
 2.  Imported Excel sheet into RStudio
-3.  Deleted two DVs that are beyond the scope of this study
+3.  Removed two DVs that are beyond the scope of this study
 4.  Combined three similar DVs into one
 5.  Collapsed multiple years into one aggregated data
 
-Data Analysis: We used chi-square(X2) goodness of fit test/an inferential statistical test to understand associations between children's race in relation to their exit reasons. We used fundamental statistical functions and ran chi-square goodness of fit test to test our null-hypothesis, which was that there was no associations between IVs and DVs.
+Data Analysis: We used chi-square(X2) goodness of fit test to understand associations between children's race and their EI exit reasons. We used fundamental statistical functions and ran chi-square to test our null-hypothesis, which was that there was no associations between children's races and their exit reasons. For this project, Black/African American and White children and their association with "
 
 # Results
 
-As you can see...
+The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately \_\_% of the children were Black/African American, while \_\_\_ children reported as being White. The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022.
+
+Looking specifically at the Attempts to Contact Unsuccessful/DQ category, approximately 13.5% of Black/African American children exited EI per disqualification due to agencies losing contact with families, while only about 5.98% of White children were disqualified from services for the same reason (Figure 1). The chi-square indicated that there was a statistically significant association between children being Black/African American or White and them leaving EI due to being disqualified, (CHI SQUARE VALUES BASED ONLY ON THE us_data_DQ_proportion BUT WITH JUS TBLACK AND WHITE!)
 
 ```{r}
 library(tidyverse)
@@ -61,10 +63,12 @@ library(janitor)
 library(tidylog)
 library(sjPlot)
 library(lme4)
-
+library(tibble)
+library(dplyr)
 ```
 
 ```{r include=FALSE}
+# importing the data and cleaning it up 
 byrace <- import(here("Data", "race v.2.xlsx")) %>% 
   clean_names() %>% 
   select(-7, -12) %>% 
@@ -74,6 +78,7 @@ str(byrace)
 ```
 
 ```{r}
+# aggregated by race and stte
 agg_by_race_and_state <- byrace %>% 
   group_by(race, area) %>% 
   summarize(exit_total = sum(exiting_total2), 
@@ -83,53 +88,41 @@ agg_by_race_and_state <- byrace %>%
             part_b_eligible_exiting_part_c = sum(part_b_eligible_exiting_part_c),
             complete_or_not_eligible = sum(complete_or_not_eligible))
 
+# aggregated by race for OR
 race_oregon <- agg_by_race_and_state %>%
   filter(area == "Oregon")
 
+# aggregated by race for US
 race_us <- agg_by_race_and_state %>% 
   filter(area == "US and Outlying Areas")
 
-chisq.test(race_us[, 3:8])
-chisq.test(race_oregon[, 3:8])
+```
 
+```{r}
+# run a quick chi square tests for trial/Omnibus 
+chisq.test(race_us[, 3:8])
+
+# chisq.test(race_oregon[, 3:8])
+```
+
+```{r}
 # We were curious if PI's (Pacific Islanders) small numbers skewed the chi-square, so we took it out and ran it again. It doesn't seem to have impacted much as P value is still very small with or without PI data. 
 race_oregon_subset <- race_oregon %>% 
   filter(race != "PI")
-chisq.test(race_oregon_subset[, 3:8])
-
+# chisq.test(race_oregon_subset[, 3:8])
 ```
 
 ```{r}
-#table (Oregon)
-
-oregon_data_long <- race_oregon %>% 
-  pivot_longer(
-    cols = 4:8,
-    values_to = "values",
-    names_to = "names"
-  ) %>% 
-  group_by(race) %>% 
-  mutate(percentage = round(values/exit_total, digits = 4))
-# I changed the digits for "round" as 2 digits were too small for % :) 
-
-oregon_data_wide <- oregon_data_long %>% 
-  select(-c(exit_total,values)) %>% 
-  pivot_wider(
-    names_from = names,
-    values_from = percentage
-  )
+# trial bar charts 
+# ggplot(oregon_data_long, 
+# aes(x = race, y = percentage, fill = race)) +  
+#  geom_bar(stat = "identity", position = "dodge") +
+#  theme_minimal() +
+#  facet_wrap(~ names)
 ```
 
 ```{r}
-ggplot(oregon_data_long, 
-  aes(x = race, y = percentage, fill = race)) +  
-  geom_bar(stat = "identity", position = "dodge") +
-  theme_minimal() +
-  facet_wrap(~ names)
-```
-
-```{r}
-#table (US) 
+# US long and wide  
 
 us_data_long <- race_us %>% 
   pivot_longer(
@@ -153,7 +146,7 @@ agg_by_area <- byrace %>%
   group_by(area) %>% 
   summarize(exit_total = sum(exiting_total2), 
             withdrawal_by_parent = sum(withdrawal_by_parent))
-chisq.test(agg_by_area[, 2:3])
+# chisq.test(agg_by_area[, 2:3])
 
 ```
 
@@ -164,11 +157,13 @@ data_oregon <- byrace %>%
   summarize(exit_total = sum(exiting_total2), 
             withdrawal_by_parent = sum(withdrawal_by_parent)) %>% 
   mutate(proportion = withdrawal_by_parent / exit_total)
-chisq.test(data_oregon[, 2:3])
 
+# chi square for oregon 
+# chisq.test(data_oregon[, 2:3])
 ```
 
 ```{r}
+# data national 
 data_national <- byrace %>% 
   filter(area == "US and Outlying Areas") %>% 
   group_by(race) %>% 
@@ -176,7 +171,111 @@ data_national <- byrace %>%
             withdrawal_by_parent = sum(withdrawal_by_parent)) %>% 
   mutate(proportion = withdrawal_by_parent / exit_total)
 
-chisq.test(data_oregon[, 2:3])
+# chisq.test(data_oregon[, 2])
+```
+
+```{r}
+# figure 1 for DQ data in US - HOW CAN I ADD DATA LBELS WITH % ON EACH BAR? 
+
+us_data_wide <- us_data_wide %>% 
+  select(race, attempts_to_contact_unsuccessful) %>% 
+    mutate(attempts_to_contact_unsuccessful = attempts_to_contact_unsuccessful * 100)
+```
+
+```{r}
+# figure 1 continues 
+ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
+  geom_bar(stat = "identity", fill = "darkorange3") +
+  labs(
+    title = "Figure 1: Unsuccessful Contacts/DQ (U.S.)", 
+    x = "Race", 
+    y = "Percentage of Exit by Race"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# figure 1 continues 
+# I NEED TO KEEP THE TOTAL NUMBER OF EXIT IN THIS CHART TO RUN CHI SQUARE 
+us_data_wide_DQ_BLWH <- us_data_wide %>% 
+  select(race, attempts_to_contact_unsuccessful) %>% 
+  filter(race == "BL" | race == "WH") %>% 
+  mutate(attempts_to_contact_unsuccessful = attempts_to_contact_unsuccessful)
+```
+
+```{r}
+# Oregon data long and wide
+oregon_data_long <- race_oregon %>% 
+  pivot_longer(
+  cols = 4:8,
+  values_to = "values",
+  names_to = "names"
+ ) %>% 
+  group_by(race) %>% 
+  mutate(percentage = round(values/exit_total, digits = 4))
+
+oregon_data_wide <- oregon_data_long %>% 
+  select(-c(exit_total,values)) %>% 
+  pivot_wider(
+    names_from = names,
+    values_from = percentage
+  )
+```
+
+```{r}
+# figure 2 for Oregon DQ data 
+oregon_data_wide_DQ <- oregon_data_wide %>% 
+  select(race, attempts_to_contact_unsuccessful) %>%  
+  mutate(
+    attempts_to_contact_unsuccessful = attempts_to_contact_unsuccessful * 100
+  )
+
+```
+
+```{r}
+# figure 2 continues 
+ ggplot(oregon_data_wide_DQ, 
+        aes(x = race, y = attempts_to_contact_unsuccessful)) +
+  geom_bar(stat = "identity", fill = "green4") +
+  labs(
+    title = "Figure 2: Unsuccessful Contacts/DQ (Oregon)", 
+    x = "Race", 
+    y = "Percentage of Exit by Race"
+  ) +
+  theme_minimal()
+ 
+ # print(oregon_data_wide_DQ) 
+```
+
+```{r}
+# do we need a contingency table? 
+# c_table <- table(us_data_wide_DQ_BLWH$race, 
+# us_data_wide_DQ_BLWH$attempts_to_contact_unsuccessful)
+```
+
+```{r}
+# Did I just make the summary table of what we decided to look at for this project!?!? 
+# WE STILL HAVE TO FILTER ONLY BL AND WHITE BEFORE RUNNING THE CHI SQUARE 
+us_data_DQ <- byrace %>% 
+  filter(area == "US and Outlying Areas") %>% 
+  group_by(race) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful)) 
+```
+
+```{r}
+# and did I just run the chi-square for the dataset!?!? NOPE!
+# WE STILL HAVE TO FILTER ONLY BL AND WHITE BEFORE RUNNING THE CHI SQUARE 
+chisq.test(us_data_DQ[, 2])
+```
+
+```{r}
+us_data_DQ_proportion <- byrace %>% 
+  filter(area == "US and Outlying Areas") %>% 
+  group_by(race) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful)) %>% 
+  mutate(proportion = (attempts_to_contact_unsuccessful / exit_total) * 100) 
 ```
 
 # Discussion
@@ -184,3 +283,9 @@ chisq.test(data_oregon[, 2:3])
 \newpage
 
 # References
+
+Early Childhood Technical Assistance Center \[ecta\], (2023, October 6). *Part C of IDEA*. ecta. <https://ectacenter.org/partc/partc.asp>
+
+@morgan2012b
+
+Romano, S.D. (2006). Historical perspectives. In G. M. Foley & J.D. Hochman (Eds.), *Mental health in early intervention: Achieving unity in principles and practice* (pp. 33-58). Baltimore: Paul H. Brookes Publishing Company.
