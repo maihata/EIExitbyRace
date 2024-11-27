@@ -81,7 +81,21 @@ byrace <- import(here("Data", "race v.2.xlsx")) %>%
 #| labs: exit-total
 # Do we need to use this table to report the white and black students percentage? Or we can show the result using an inline code in the Results section
 
-percentage_by_race <- byrace %>% 
+# Created two objective that show percentage and total exits - 1127
+
+# percentage_by_race <- byrace %>% 
+#   filter(area == "US and Outlying Areas") %>% 
+#   group_by(race) %>% 
+#   summarize(
+#     total_exit = sum(exiting_total2),
+#     .groups = "drop"
+#     ) %>% 
+#   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
+# percentage_by_race %>% 
+#   gt()
+
+
+other_by_race <- byrace %>% 
   filter(area == "US and Outlying Areas") %>% 
   group_by(race) %>% 
   summarize(
@@ -89,8 +103,16 @@ percentage_by_race <- byrace %>%
     .groups = "drop"
     ) %>% 
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
-percentage_by_race %>% 
-  gt()
+
+
+oregon_by_race <- byrace %>% 
+  filter(area == "Oregon") %>% 
+  group_by(race) %>% 
+  summarize(
+    total_exit = sum(exiting_total2),
+    .groups = "drop" # .groups = drop: All levels of grouping are dropped.
+  ) %>% 
+  mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
 
 ```
 
