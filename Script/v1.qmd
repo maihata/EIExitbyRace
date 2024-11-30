@@ -18,11 +18,21 @@ The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant
 
 The IDEA Section 618 requires that the data is collected on children who had an active IFSP who stopped receiving services, or “exited” EI services (U.S. Department of Education \[DOE\], 2024). Recent data revealed that racially and/or linguistically marginalized infants and toddlers are much more likely to leave EI services via disqualification from EI services due to non-response to agencies’ outreach efforts after they had been made eligible. The purpose of this study is to explore the patterns in which families from racially and/or linguistically marginalized communities leave EI services.
 
+This project examined extant data on EI service exit from 2013-2022. The data was obtained from the Office of Special Education Services (OSEP, 2024) website. The goal of this project was to understand associations between children's race and exit reasons, using descriptive statistics including chi-square and odd-ratio analysis.
+
 # **Methods**
 
-This project examined extant data on EI service exit from 2013-2022, which was obtained online from the Office of Special Education Services (OSEP, 2024). The goal of this study was to understand associations between children's race and exit reasons, which then was compared to the data from Oregon which was also obtained from OSEP (2024).
+**Independent variables (IV)**: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven racial categories serving as IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White) which were not collapsed. We briefly considered collapsing some categories in order to make the analysis more powerful (as Maiko will also focusing on data from Oregon which has no data for certain cells as some populations are very underrepresented. However, we decided against doing so as this would likely obscure the data, as there are large disparities in exit reasons even within BIPOC populations.
 
-Variables: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White), and ten DVs that were collapsed into 6 categories:
+**Dependent variables (DV)**: As you can see in Table 1, there are ten exit categories under three general exit reason “umbrellas” (Hansen et al., 2 016).
+
+```{r}
+# I thought about adding a table here using kable, I did import the excel chart? 
+#exit_categories <- import(here("Data", "exit categories.xlsx")) %>%
+# clean_names() 
+```
+
+These ten categories were then collapsed into six categories, based on the scope of the study and for logistical reasons (e.g. "Deceased" category is beyond the scope of this study; one code is not being used in Oregon; multiple codes were similar in nature to each other):
 
 -   Attempts to contact unsuccessful (DQ)
 -   Withdrawal by parent (Withdrawal)
@@ -39,7 +49,9 @@ Preparatory work: As the original data sets from OSEP contained dependent variab
 4.  Combined three similar DVs into one
 5.  Collapsed multiple years into one aggregated data
 
-Data Analysis: We used chi-square(X2) goodness of fit test to understand associations between children's race and their EI exit reasons. We used fundamental statistical functions and ran chi-square to test our null-hypothesis, which was that there was no associations between children's races and their exit reasons. For this project, Black/African American and White children and their association with "
+Data Analysis: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons on multiple levels. First, we analyzed the entire national data set as an omnibus test. For this, we used fundamental statistical functions and ran chi-square to test our null-hypothesis, which was that there was no associations between children's races and their exit reasons. 
+
+We chose the exit reason of "Attempts to Contact Unsuccessful", as this means disqualification from EI agencies to run similar analysis  Black/African American and White children and the association with one exit reason we created 2x2 table for these groups, complete with the total number of exit that year. This also enabled us to analyze the odd ratio. 
 
 # Results
 
@@ -65,6 +77,7 @@ library(sjPlot)
 library(lme4)
 library(tibble)
 library(dplyr)
+library(epitools)
 ```
 
 ```{r include=FALSE}
@@ -115,8 +128,6 @@ oregon_by_race <- byrace %>%
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
 
 ```
-
-
 
 ```{r}
 # aggregated by race and stte
@@ -326,7 +337,5 @@ us_data_DQ_proportion <- byrace %>%
 # References
 
 Early Childhood Technical Assistance Center \[ecta\], (2023, October 6). *Part C of IDEA*. ecta. <https://ectacenter.org/partc/partc.asp>
-
-@morgan2012b
 
 Romano, S.D. (2006). Historical perspectives. In G. M. Foley & J.D. Hochman (Eds.), *Mental health in early intervention: Achieving unity in principles and practice* (pp. 33-58). Baltimore: Paul H. Brookes Publishing Company.
