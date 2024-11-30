@@ -65,6 +65,12 @@ library(sjPlot)
 library(lme4)
 library(tibble)
 library(dplyr)
+
+#I think you imported quiet a lot of libraries. Did you use all these packages? I think you can clean out those that were not used (Review from Stephen)
+
+# I carefully went over your all your code blocks.  I think they were thoughtfully executed to achieve the objectives set out in your project (Review from Stephen)
+
+# I think each code block was well executed to achieve the object of the project. Dont have much suggestions. Good work done.
 ```
 
 ```{r include=FALSE}
@@ -75,6 +81,8 @@ byrace <- import(here("Data", "race v.2.xlsx")) %>%
   mutate(complete_or_not_eligible = complete_prior_to_reaching_max_age_for_part_c + not_eligible_for_part_b_exit_with_no_referrals + not_eligible_for_part_b_exit_with_referrals_to_other_programs)
 
 # str(byrace) I think we can remove this because it is only for examining the structure
+
+# This chunk is interesting as you sought to standardize column names, remove columns 7 and 12), and create a new column(complete_or_not_eligible) by aggregating three existing columns (Review from Stephen)
 ```
 
 ```{r}
@@ -94,7 +102,6 @@ byrace <- import(here("Data", "race v.2.xlsx")) %>%
 # percentage_by_race %>% 
 #   gt()
 
-
 other_by_race <- byrace %>% 
   filter(area == "US and Outlying Areas") %>% 
   group_by(race) %>% 
@@ -104,6 +111,7 @@ other_by_race <- byrace %>%
     ) %>% 
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
 
+# filtering by area (US and Outlying Areas), grouping by race and  creating percentage column. Code looks good and functional to me (Review from Stephen)
 
 oregon_by_race <- byrace %>% 
   filter(area == "Oregon") %>% 
@@ -114,9 +122,8 @@ oregon_by_race <- byrace %>%
   ) %>% 
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
 
+#Rounding off the percentage column could be set to 2 instead of 3 (Review from Stephen)
 ```
-
-
 
 ```{r}
 # aggregated by race and stte
@@ -137,6 +144,7 @@ race_oregon <- agg_by_race_and_state %>%
 race_us <- agg_by_race_and_state %>% 
   filter(area == "US and Outlying Areas")
 
+#aggregating by state of Oregon and US and Outlyng areas relevant to get an understanding of the data at a closer/specific level of detail (Review from Stephen) 
 ```
 
 ```{r}
@@ -318,6 +326,8 @@ us_data_DQ_proportion <- byrace %>%
             attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful)) %>% 
   mutate(proportion = (attempts_to_contact_unsuccessful / exit_total) * 100) 
 ```
+
+Review notes: I carefully went over your all your code blocks. I think they were thoughtfully executed to achieve the objectives set out in your project
 
 # Discussion
 
