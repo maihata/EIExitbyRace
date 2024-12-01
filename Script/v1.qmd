@@ -81,11 +81,11 @@ We then analyzed the association between the exit reason, "Attempts to Contact U
 # Results
 
 The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately \_\_% of the children were Black/African American, while \_\_\_ children were reported as being White. The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022.
+
 ```{r}
 # I tried to inline code here, but didn't work: 
 # (The chi-square test statistic is `r round(omni_statistic, 2)`, with a p-value of `r format.pval(omni_p_value, digit = 3)`.
 ```
-
 
 ```{r include=FALSE}
 # importing the data and cleaning it up 
@@ -171,7 +171,7 @@ race_oregon_subset <- race_oregon %>%
 # chisq.test(race_oregon_subset[, 3:8])
 ```
 
-Looking specifically at the Attempts to Contact Unsuccessful/DQ category nationally, approximately 13.5% of Black/African American children exited EI per disqualification due to agencies losing contact with families, while only about 5.98% of White children were disqualified from services for the same reason (Figure 1). The chi-square indicated that there was a statistically significant association between children being Black/African American or White and them leaving EI due to being disqualified, (CHI SQUARE VALUES BASED ONLY ON THE us_data_DQ_proportion BUT WITH JUST BLACK AND WHITE!)
+Looking specifically at the Attempts to Contact Unsuccessful/DQ category nationally, approximately 13.5% of Black/African American children exited EI per disqualification due to agencies losing contact with families, while only about 5.98% of White children were disqualified from services for the same reason (Figure 1).
 
 ```{r}
 # trial bar charts 
@@ -253,15 +253,51 @@ ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
     y = "Percentage of Exit by Race"
   ) +
   theme_minimal()
+
+```
+
+The chi-square indicated that there was a statistically significant association between children being Black/African American or White and them leaving EI due to being disqualified. The chi-square test indicated, X-squared (222556.00, N = 2,088,058), *p* \< 2.2e-16 or 0.0000000000000002 (*p* \< .001).
+
+```{r}
+# remaking a df with exit total and DQ 12/1
+us_data_attempts <- byrace %>% 
+  filter(area == "US and Outlying Areas") %>% 
+  group_by(race) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful)) %>% 
+  mutate(proportion = attempts_to_contact_unsuccessful / exit_total)
 ```
 
 ```{r}
-# figure 1 continues 
-# I NEED TO KEEP THE TOTAL NUMBER OF EXIT IN THIS CHART TO RUN CHI SQUARE 
-us_data_wide_DQ_BLWH <- us_data_wide %>% 
-  select(race, attempts_to_contact_unsuccessful) %>% 
-  filter(race == "BL" | race == "WH") %>% 
-  mutate(attempts_to_contact_unsuccessful = attempts_to_contact_unsuccessful)
+# 12/1 DQ chi-square prep continues SUCCESS!! :) 
+us_data_attempts_BLWH <- us_data_attempts %>% 
+  select(race, exit_total, attempts_to_contact_unsuccessful) %>% 
+filter(race == "BL" | race == "WH") 
+```
+
+```{r}
+# YAY 12/1 
+chi_dq_BLWH_result <- chisq.test(us_data_attempts_BLWH[, 2:3])
+chi_dq_BLWH_result
+```
+
+```{r}
+# Chat GPT suggests, for inline codes: 
+# chi_statistic <- chi_result$statistic
+# chi_p_value <- chi_result$p.value
+# chi_df <- chi_result$parameter
+
+# The chi-square test returned a statistic of `r round(chi_statistic, 2)`, with a p-value of `r format.pval(chi_p_value, digits = 3)`, and degrees of freedom equal to `r chi_df`.
+```
+
+```{r}
+# No need for this chunk anymore as I cleaned it up another way: 
+# us_data_wide_DQ_BLWH <- us_data_wide %>% 
+#  select(race, attempts_to_contact_unsuccessful) %>% 
+#  filter(race == "BL" | race == "WH") %>% 
+#  mutate(attempts_to_contact_unsuccessful = attempts_to_contact_unsuccessful)
+
+# us_data_wide_DQ_BLWH
 ```
 
 ```{r}
@@ -297,7 +333,7 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
 # figure 2 continues 
  ggplot(oregon_data_wide_DQ, 
         aes(x = race, y = attempts_to_contact_unsuccessful)) +
-  geom_col(stat = "identity", fill = "green4", position = 'dodge') +
+  geom_col(stat = "identity", fill = "gray24", position = 'dodge') +
    geom_text(aes(label = attempts_to_contact_unsuccessful),
              position = position_dodge(0.9),
              vjust = -0.3) +
@@ -312,34 +348,48 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
 ```
 
 ```{r}
-# do we need a contingency table? 
-# c_table <- table(us_data_wide_DQ_BLWH$race, 
-# us_data_wide_DQ_BLWH$attempts_to_contact_unsuccessful)
-```
-
-```{r}
-# Did I just make the summary table of what we decided to look at for this project!?!? 
+# Did I just make the summary table of what we decided to look at for this project!?!? Okay I did the same work again but that's okay, GAH 
 # WE STILL HAVE TO FILTER ONLY BL AND WHITE BEFORE RUNNING THE CHI SQUARE 
-us_data_DQ <- byrace %>% 
-  filter(area == "US and Outlying Areas") %>% 
-  group_by(race) %>% 
-  summarize(exit_total = sum(exiting_total2), 
-            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful))
+# us_data_DQ <- byrace %>% 
+#  filter(area == "US and Outlying Areas") %>% 
+#  group_by(race) %>% 
+#  summarize(exit_total = sum(exiting_total2), 
+#            attempts_to_contact_unsuccessful = 
+# sum(attempts_to_contact_unsuccessful))
 ```
 
 ```{r}
-# and did I just run the chi-square for the dataset!?!? NOPE!
-# WE STILL HAVE TO FILTER ONLY BL AND WHITE BEFORE RUNNING THE CHI SQUARE 
-chisq.test(us_data_DQ[, 2])
-```
-
-```{r}
+# Used this dataset for making the figure 2
 us_data_DQ_proportion <- byrace %>% 
   filter(area == "US and Outlying Areas") %>% 
   group_by(race) %>% 
   summarize(exit_total = sum(exiting_total2), 
             attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful)) %>% 
   mutate(proportion = (attempts_to_contact_unsuccessful / exit_total) * 100) 
+```
+
+Because whether or not children were Black/African American or White and whether they were likely to be disqualified from EI services due to "Attempts to Contact Unsuccessful" were both binary variables, an odds ratio was computed. Odds ratio are commonly used for reporting the odds of one outcome between two independent groups (Morgan, et al., 2020).
+
+A 2x2 contingency table was created and analyzed, and the odds ratio was calculated to determine the relative likelihood of the students being disqualified between the two groups. The odds of Black infants and toddlers being disqualified from EI services due to "attempts to contact unsuccessful" were significantly higher than those for White infants and toddlers, with an odds ratio of **2.46** (95% CI \[2.43, 2.48\]). This indicates that Black students were approximately 2.46 times more likely than White students to be disqualified from EI services for this reason.
+
+```{r}
+# prepping the df to mutate a column to have non_dq and delete total 
+us_data_wide_DQ_BLWH <- us_data_attempts_BLWH %>% 
+  mutate(non_dq = exit_total - attempts_to_contact_unsuccessful)
+
+us_data_wide_DQ_BLWH_nototal <- us_data_wide_DQ_BLWH %>% 
+  select(-exit_total)
+```
+
+```{r}
+#Per chatGPT. The columns and rows switched...? 
+us_dq_BLWH_matrix <- matrix( 
+  c(56155, 359718, 99922, 1572263), 
+  nrow = 2, 
+  dimnames = list(
+    c("attempts_to_contact_unsuccessful", "Other"), 
+    c("Black", "White")
+  ))
 ```
 
 # Discussion
@@ -353,5 +403,7 @@ It's not a "risk factor"
 # References
 
 Early Childhood Technical Assistance Center \[ecta\], (2023, October 6). *Part C of IDEA*. ecta. <https://ectacenter.org/partc/partc.asp>
+
+Morgan, G.A., Barrett, K.C., Leech, N.L., & Gloeckner, G.W. (2020). *IBM SPSS for introductory statistics: Use and interpretation.* Routledge.
 
 Romano, S.D. (2006). Historical perspectives. In G. M. Foley & J.D. Hochman (Eds.), *Mental health in early intervention: Achieving unity in principles and practice* (pp. 33-58). Baltimore: Paul H. Brookes Publishing Company.
