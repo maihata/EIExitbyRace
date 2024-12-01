@@ -49,9 +49,9 @@ Preparatory work: As the original data sets from OSEP contained dependent variab
 4.  Combined three similar DVs into one
 5.  Collapsed multiple years into one aggregated data
 
-Data Analysis: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons on multiple levels. First, we analyzed the entire national data set as an omnibus test. For this, we used fundamental statistical functions and ran chi-square to test our null-hypothesis, which was that there was no associations between children's races and their exit reasons. 
+Data Analysis: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons on multiple levels. First, we analyzed the entire national data set as an omnibus test. For this, we used fundamental statistical functions and ran chi-square to test our null-hypothesis, which was that there was no associations between children's races and their exit reasons.
 
-We chose the exit reason of "Attempts to Contact Unsuccessful", as this means disqualification from EI agencies to run similar analysis  Black/African American and White children and the association with one exit reason we created 2x2 table for these groups, complete with the total number of exit that year. This also enabled us to analyze the odd ratio. 
+We chose the exit reason of "Attempts to Contact Unsuccessful", as this means disqualification from EI agencies to run similar analysis Black/African American and White children and the association with one exit reason we created 2x2 table for these groups, complete with the total number of exit that year. This also enabled us to analyze the odd ratio.
 
 # Results
 
@@ -288,7 +288,10 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
 # figure 2 continues 
  ggplot(oregon_data_wide_DQ, 
         aes(x = race, y = attempts_to_contact_unsuccessful)) +
-  geom_bar(stat = "identity", fill = "green4") +
+  geom_col(stat = "identity", fill = "green4", position = 'dodge') +
+   geom_text(aes(label = attempts_to_contact_unsuccessful),
+             position = position_dodge(0.9),
+             vjust = -0.3) +
   labs(
     title = "Figure 2: Unsuccessful Contacts/DQ (Oregon)", 
     x = "Race", 
