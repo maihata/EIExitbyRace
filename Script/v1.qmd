@@ -9,6 +9,7 @@ execute:
   message: false 
   warning: false
 editor: visual
+engine: knitr
 bibliography: references.bib
 ---
 
@@ -27,7 +28,7 @@ The purpose of this project is to explore the patterns in which families from ra
 
 **Independent variables (IV)**: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven racial categories serving as IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White). We briefly discussed collapsing racial categories in order to make the analysis more powerful (as Maiko will also be working on state-level data with cells with "0"s as certain populations are very underrepresented). However, we decided against doing so as this would likely obscure the results, as there are large disparities within BIPOC populations when we look at their exit reasons.
 
-**Dependent variables (DV)**: As you can see in Table 1, there are ten exit categories under three general exit reason “umbrellas” (Hansen et al., 2 016):
+**Dependent variables (DV)**: As you can see in Table 1, there are ten exit categories under three general exit reason “umbrellas” (Hansen et al., 2016):
 
 ```{r include=FALSE}
 library(tidyverse)
@@ -81,15 +82,10 @@ We then analyzed the association between the exit reason, "Attempts to Contact U
 
 # Results
 
-The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately \_\_\_\_\_% of the children were Black/African American, while \_\_\_\_\_\_ children were reported as being White. The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001).
-
-```{r}
-# I tried to inline code here, but didn't work: 
-# (The chi-square test statistic is `r round(omni_statistic, 2)`, with a p-value of `r format.pval(omni_p_value, digit = 3)`.
-```
-
 ```{r include=FALSE}
-# importing the data and cleaning it up 
+#|label: load-data
+# importing the data and cleaning it up
+
 byrace <- import(here("Data", "race v.2.xlsx")) %>% 
   clean_names() %>% 
   select(-7, -12) %>% 
@@ -99,21 +95,44 @@ byrace <- import(here("Data", "race v.2.xlsx")) %>%
 ```
 
 ```{r}
+#| label: aggregated-by-race
+
+# aggregated by race and stte
+agg_by_race_and_state <- byrace %>% 
+  group_by(race, area) %>% 
+  summarize(exit_total = sum(exiting_total2), 
+            withdrawal_by_parent = sum(withdrawal_by_parent),
+            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful),
+            moved_out_of_state = sum(moved_out_of_state),
+            part_b_eligible_exiting_part_c = sum(part_b_eligible_exiting_part_c),
+            complete_or_not_eligible = sum(complete_or_not_eligible))
+
+# aggregated by race for OR
+race_oregon <- agg_by_race_and_state %>%
+  filter(area == "Oregon")
+
+# aggregated by race for US
+race_us <- agg_by_race_and_state %>% 
+  filter(area == "US and Outlying Areas")
+```
+
+```{r}
+#| label: chisq-test-trial-omnibus
+# run a quick chi square tests for trial/Omnibus. Saving the p-value and test-statistics p value and result 
+# It seems if we add the inline code below the relevant 
+chi_omni <-chisq.test(race_us[, 3:8])
+omni_p_value <- chi_omni$p.value
+omni_statistic <- chi_omni$statistic
+
+# chisq.test(race_oregon[, 3:8])
+```
+
+```{r}
 #| labs: exit-total
 # Do we need to use this table to report the white and black students percentage? Or we can show the result using an inline code in the Results section
 
 # Created two objective that show percentage and total exits - 1127
-
-# percentage_by_race <- byrace %>% 
-#   filter(area == "US and Outlying Areas") %>% 
-#   group_by(race) %>% 
-#   summarize(
-#     total_exit = sum(exiting_total2),
-#     .groups = "drop"
-#     ) %>% 
-#   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
-# percentage_by_race %>% 
-#   gt()
+# Figured out how to pull percentage, need to check the correctness - 1201
 
 other_by_race <- byrace %>% 
   filter(area == "US and Outlying Areas") %>% 
@@ -132,38 +151,16 @@ oregon_by_race <- byrace %>%
     .groups = "drop" # .groups = drop: All levels of grouping are dropped.
   ) %>% 
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
-
 ```
+
+The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately `r other_by_race %>% filter(race == "BL") %>% pull(percentage)`% of the children were Black/African American, while `r other_by_race %>% filter(race == "WH") %>% pull(percentage)` children were reported as being White. The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001). **The chi-square test statistic is `r format(round(omni_statistic, digits = 2), scientific = FALSE)`, with a p-value of `r ifelse(omni_p_value < 0.001, "< 0.001", round(omni_p_value, 3))`**
 
 ```{r}
-# aggregated by race and stte
-agg_by_race_and_state <- byrace %>% 
-  group_by(race, area) %>% 
-  summarize(exit_total = sum(exiting_total2), 
-            withdrawal_by_parent = sum(withdrawal_by_parent),
-            attempts_to_contact_unsuccessful = sum(attempts_to_contact_unsuccessful),
-            moved_out_of_state = sum(moved_out_of_state),
-            part_b_eligible_exiting_part_c = sum(part_b_eligible_exiting_part_c),
-            complete_or_not_eligible = sum(complete_or_not_eligible))
-
-# aggregated by race for OR
-race_oregon <- agg_by_race_and_state %>%
-  filter(area == "Oregon")
-
-# aggregated by race for US
-race_us <- agg_by_race_and_state %>% 
-  filter(area == "US and Outlying Areas")
-
+# I tried to inline code here, but didn't work: 
+# (The chi-square test statistic is `r round(omni_statistic, 2)`, with a p-value of `r format.pval(omni_p_value, digit = 3)`.
+# Added engine: knitr in the YAML and insert the chunk code before the text that needs inline code
 ```
 
-```{r}
-# run a quick chi square tests for trial/Omnibus. Saving the p-value and test-statistics p value and result 
-chi_omni <-chisq.test(race_us[, 3:8])
-omni_p_value <- chi_omni$p.value
-omni_statistic <- chi_omni$statistic
-
-# chisq.test(race_oregon[, 3:8])
-```
 
 ```{r}
 # We were curious if PI's (Pacific Islanders) small numbers skewed the chi-square, so we took it out and ran it again. It doesn't seem to have impacted much as P value is still very small with or without PI data. 
@@ -426,7 +423,7 @@ In addition, researchers have argued that quantitative methods are inequitable, 
 
 \newpage
 
-# References (DOESN'T SHOW CORRECTLY because mixing the insert citation and just typed ones) 
+# References (DOESN'T SHOW CORRECTLY because mixing the insert citation and just typed ones)
 
 Castillo, W. & Strunk, K. (2024, November 15). How to QuantCrit \[PowerPoint slides\]. <https://www.sree.org/critical-perspectives>
 
