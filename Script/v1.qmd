@@ -57,6 +57,7 @@ exit_categories <- import(here("Data","exit_categories.xlsx")) %>%
 ```
 
 ```{r}
+#If you were going to include these in your final html, it might be nice to rename the columns (ie "Exiting Reasons instead of "exiting_reasons:)
 kable(exit_categories, caption = "Table of Exit Reasons")
 ```
 
@@ -69,6 +70,7 @@ These ten reasons were collapsed into six categories based on the scope of the s
 -   Part B eligibility not determined
 -   Part B eligible
 
+#should your tidying be part of this prep work?
 **Preparatory work**: We prepared the data in a following manner:
 
 1.  Created an Excel sheet from the national and Oregon data sets
@@ -192,6 +194,7 @@ Looking specifically at the "Attempts to Contact Unsuccessful" category, approxi
 #  facet_wrap(~ names)
 ```
 
+#Should this be done earlier in your code?
 ```{r}
 # US long and wide  
 
@@ -254,6 +257,8 @@ us_data_wide <- us_data_wide %>%
 ```
 
 ```{r}
+#It could be helpful to relable your x axis with the full race name instead of just the abbreviations (ie Pacific Islander instead of PI). You could tilt these labels to be horizontal so there's space :) 
+
 # figure 1 continues 
 ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
   geom_bar(stat = "identity", fill = "gray43") +
@@ -439,7 +444,7 @@ h <- 2 * (asin(sqrt(p1)) - asin(sqrt(p2)))
 
 # h 
 ```
-
+# I think it could be helpful to define attempts to contact unsuccessful 
 # Discussion
 
 Our analysis revealed that the odds ratio for Black/African American infants and toddlers to be disqualified from EI services due to "Attempts to Contact Unsuccessful" was 2.46 times higher when compared to their White peers nationally. However, there are many limitations to this descriptive analysis.
