@@ -76,11 +76,23 @@ These ten reasons were collapsed into six categories based on the scope of the s
 3.  Collapsed/removed DVs
 4.  Collapsed multiple years into one aggregated data by race
 
-**Data Analysis**: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons. First, we ran descriptive analysis of the national dataset as an omnibus test. For this, we used foundational statistical functions and chi-square to test our null-hypothesis; there is no associations between children's race and their exit reasons.
+**Data Analysis**: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons. Chi-square tests tell us if we can be confident that differences in counts and expected counts are not due to chance. In other words, chi-square tests can be used to evaluate if there is a statistically significant relationship between two dichotomous or nominal variable. However, they are not able to indicate the strength or the direction of the relationship (Morgan et al., 2020). 
 
-We then analyzed the association between the exit reason, "Attempts to Contact Unsuccessful", using similar analysis. For this stage, we looked at the association between two racial categories, Black/African American and White infants/toddler groups, with "Attempts to Contact Unsuccessful". We created 2x2 table for this analysis, complete with the total number of exits. This was used to analyze the odd ratio and Cohen's *h*.
+First, we ran descriptive analysis of the national dataset as an omnibus test. For this, we used foundational statistical functions and chi-square to test our null-hypothesis; there is no associations between children's race and their exit reasons.
+
+We then analyzed the association between the exit reason, "Attempts to Contact Unsuccessful", using similar analysis. For this stage, we looked at the association between two racial categories, Black/African American and White infants/toddler groups, with "Attempts to Contact Unsuccessful". We created 2x2 table for this analysis, complete with the total number of exits. This was used to analyze the odd ratio and Cohen's *h*. Odds ratio are commonly used for reporting the odds of one outcome between two independent groups (Morgan, et al., 2020).
+
 
 # Results
+
+The initial exploration included data on 3,310,559 children nationally who exited EI services between 2013 and 2022. Approximately 4.41% of the children were Black/African American, while 50.51% children were reported as being White. This shows possible disproportional representation of children in each racial category, as census showed that during these years, Black/African American and White children represented approximately 14% for Black/African American children under the age of 18 and between 52% to 49 % for White children nationally (The Annie E. Casey Foundation, 2024).
+
+The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001).
+
+```{r}
+# I tried to inline code here, but didn't work: 
+# (The chi-square test statistic is `r round(omni_statistic, 2)`, with a p-value of `r format.pval(omni_p_value, digit = 3)`.
+```
 
 ```{r include=FALSE}
 #|label: load-data
@@ -128,7 +140,7 @@ omni_statistic <- chi_omni$statistic
 ```
 
 ```{r}
-#| labs: exit-total
+#| label: exit-total
 # Do we need to use this table to report the white and black students percentage? Or we can show the result using an inline code in the Results section
 
 # Created two objective that show percentage and total exits - 1127
@@ -272,6 +284,23 @@ filter(race == "BL" | race == "WH")
 ```
 
 ```{r}
+# mutated a column grand_total for all the kiddos exited for earlier figures 
+us_data_attempts <- us_data_attempts %>% 
+  mutate(grand_total = sum(exit_total), na.rm = TRUE)
+```
+
+```{r}
+# now, divide the attempts_to_contact_unsuccessful by grand_total x 100 for % of each race represented in relation to the exit total between 2013-2022. 
+us_data_attempts <- us_data_attempts %>% 
+  mutate(
+    grand_total = sum(exit_total, na.rm = TRUE), 
+    portion = (exit_total / grand_total) * 100
+  )
+```
+```
+
+
+```{r}
 # YAY 12/1 
 # chi_dq_BLWH_result <- chisq.test(us_data_attempts_BLWH[, 2:3])
 # chi_dq_BLWH_result
@@ -296,7 +325,7 @@ filter(race == "BL" | race == "WH")
 # us_data_wide_DQ_BLWH
 ```
 
-When we look at the same dataset at the state level, the numbers change slightly. Approximately 9.85% of Black/African American infants ant toddllers were disqualified from EI services in Oregon due to agencies losing contact with families, while only about 8.03% of White children were disqualified for the same reason in Oregon (Figure 2).
+When we look at the same datas et at the state level, the numbers change slightly. Approximately 9.85% of Black/African American infants and toddlers were disqualified from EI services in Oregon due to agencies losing contact with families, while only about 8.03% of White children were disqualified for the same reason in Oregon (Figure 2).
 
 ```{r}
 # Oregon data long and wide
@@ -368,7 +397,7 @@ us_data_DQ_proportion <- byrace %>%
 
 The chi-square indicated that there was a statistically significant association between children being Black/African American or White and them leaving EI due to being disqualified nationally. The chi-square test indicated, X-squared (222556.00, N = 2,088,058), *p* \< 2.2e-16 or 0.0000000000000002 (*p* \< .001).
 
-Because whether or not children were Black/African American or White and whether they were likely to be disqualified from EI services due to "Attempts to Contact Unsuccessful" were both binary variables, an odds ratio was computed. Odds ratio are commonly used for reporting the odds of one outcome between two independent groups (Morgan, et al., 2020).
+Because whether or not children were Black/African American or White and whether they were likely to be disqualified from EI services due to "Attempts to Contact Unsuccessful" were both binary variables, an odds ratio was computed. 
 
 A 2x2 contingency table was created and analyzed, and the odds ratio was calculated to determine the relative likelihood of the students being disqualified between the two groups. The odds of Black infants and toddlers being disqualified from EI services due to "attempts to contact unsuccessful" were significantly higher than those for White infants and toddlers, with an odds ratio of **2.46** (95% CI \[2.43, 2.48\]). This indicates that Black students were approximately 2.46 times more likely than White students to be disqualified from EI services for this reason.
 
@@ -424,6 +453,11 @@ In addition, researchers have argued that quantitative methods are inequitable, 
 \newpage
 
 # References (DOESN'T SHOW CORRECTLY because mixing the insert citation and just typed ones)
+<<<<<<< HEAD
+=======
+
+Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424>
+>>>>>>> origin/main
 
 Castillo, W. & Strunk, K. (2024, November 15). How to QuantCrit \[PowerPoint slides\]. <https://www.sree.org/critical-perspectives>
 
