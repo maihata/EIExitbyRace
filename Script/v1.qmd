@@ -79,9 +79,26 @@ These ten reasons were collapsed into six categories based on the scope of the s
 
 We then analyzed the association between the exit reason, "Attempts to Contact Unsuccessful", using similar analysis. For this stage, we looked at the association between two racial categories, Black/African American and White infants/toddler groups, with "Attempts to Contact Unsuccessful". We created 2x2 table for this analysis, complete with the total number of exits. This was used to analyze the odd ratio and Cohen's *h*.
 
+```{r}
+# mutated a column grand_total for all the kiddos exited 
+us_data_attempts <- us_data_attempts %>% 
+  mutate(grand_total = sum(exit_total), na.rm = TRUE)
+```
+
+```{r}
+# now, divide the attempts_to_contact_unsuccessful by grand_total x 100 for % of each race represented in relation to the exit total between 2013-2022. 
+us_data_attempts <- us_data_attempts %>% 
+  mutate(
+    grand_total = sum(exit_total, na.rm = TRUE), 
+    portion = (exit_total / grand_total) * 100
+  )
+```
+
 # Results
 
-The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately \_\_\_\_\_% of the children were Black/African American, while \_\_\_\_\_\_ children were reported as being White. The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001).
+The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately 4.41% of the children were Black/African American, while 50.51% children were reported as being White. This shows possible disproportional representation of children in each racial category, as census showed that during these years, Black/African American and White children represented approximately 14% for Black/African American children under the age of 18 and between 52% to 49 % for White children nationally (The Annie E. Casey Foundation, 2024).
+
+The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001).
 
 ```{r}
 # I tried to inline code here, but didn't work: 
@@ -299,7 +316,7 @@ filter(race == "BL" | race == "WH")
 # us_data_wide_DQ_BLWH
 ```
 
-When we look at the same dataset at the state level, the numbers change slightly. Approximately 9.85% of Black/African American infants ant toddllers were disqualified from EI services in Oregon due to agencies losing contact with families, while only about 8.03% of White children were disqualified for the same reason in Oregon (Figure 2).
+When we look at the same datas et at the state level, the numbers change slightly. Approximately 9.85% of Black/African American infants and toddlers were disqualified from EI services in Oregon due to agencies losing contact with families, while only about 8.03% of White children were disqualified for the same reason in Oregon (Figure 2).
 
 ```{r}
 # Oregon data long and wide
@@ -427,6 +444,8 @@ In addition, researchers have argued that quantitative methods are inequitable, 
 \newpage
 
 # References (DOESN'T SHOW CORRECTLY because mixing the insert citation and just typed ones) 
+
+Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424>
 
 Castillo, W. & Strunk, K. (2024, November 15). How to QuantCrit \[PowerPoint slides\]. <https://www.sree.org/critical-perspectives>
 
