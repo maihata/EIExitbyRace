@@ -76,24 +76,11 @@ These ten reasons were collapsed into six categories based on the scope of the s
 3.  Collapsed/removed DVs
 4.  Collapsed multiple years into one aggregated data by race
 
-**Data Analysis**: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons. Chi-square tests tell us if we can be confident that differences in counts and expected counts are not due to chance. In other words, chi-square tests can be used to evaluate if there is a statistically significant relationship between two dichotomous or nominal variable. However, they are not able to indicate the strength or the direction of the relationship (Morgan et al., 2020). 
+**Data Analysis**: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons. Chi-square tests tell us if we can be confident that differences in counts and expected counts are not due to chance. In other words, chi-square tests can be used to evaluate if there is a statistically significant relationship between two dichotomous or nominal variable. However, they are not able to indicate the strength or the direction of the relationship (Morgan et al., 2020).
 
 First, we ran descriptive analysis of the national dataset as an omnibus test. For this, we used foundational statistical functions and chi-square to test our null-hypothesis; there is no associations between children's race and their exit reasons.
 
-```{r}
-# mutated a column grand_total for all the kiddos exited 
-us_data_attempts <- us_data_attempts %>% 
-  mutate(grand_total = sum(exit_total), na.rm = TRUE)
-```
-
-```{r}
-# now, divide the attempts_to_contact_unsuccessful by grand_total x 100 for % of each race represented in relation to the exit total between 2013-2022. 
-us_data_attempts <- us_data_attempts %>% 
-  mutate(
-    grand_total = sum(exit_total, na.rm = TRUE), 
-    portion = (exit_total / grand_total) * 100
-  )
-```
+We then analyzed the association between the exit reason, "Attempts to Contact Unsuccessful", using similar analysis. For this stage, we looked at the association between two racial categories, Black/African American and White infants/toddler groups, with "Attempts to Contact Unsuccessful". We created 2x2 table for this analysis, complete with the total number of exits. This was used to analyze the odd ratio and Cohen's \*h\*. Odds ratio are commonly used for reporting the odds of one outcome between two independent groups (Morgan, et al., 2020).
 
 # Results
 
@@ -184,7 +171,6 @@ The initial exploration included exit data from 3,310,559 children who exited th
 # (The chi-square test statistic is `r round(omni_statistic, 2)`, with a p-value of `r format.pval(omni_p_value, digit = 3)`.
 # Added engine: knitr in the YAML and insert the chunk code before the text that needs inline code
 ```
-
 
 ```{r}
 # We were curious if PI's (Pacific Islanders) small numbers skewed the chi-square, so we took it out and ran it again. It doesn't seem to have impacted much as P value is still very small with or without PI data. 
@@ -309,8 +295,21 @@ us_data_attempts <- us_data_attempts %>%
     portion = (exit_total / grand_total) * 100
   )
 ```
+
+```{r}
+# mutated a column grand_total for all the kiddos exited 
+us_data_attempts <- us_data_attempts %>% 
+  mutate(grand_total = sum(exit_total), na.rm = TRUE)
 ```
 
+```{r}
+# now, divide the attempts_to_contact_unsuccessful by grand_total x 100 for % of each race represented in relation to the exit total between 2013-2022. 
+us_data_attempts <- us_data_attempts %>% 
+  mutate(
+    grand_total = sum(exit_total, na.rm = TRUE), 
+    portion = (exit_total / grand_total) * 100
+  )
+```
 
 ```{r}
 # YAY 12/1 
@@ -365,7 +364,6 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
   mutate(
     attempts_to_contact_unsuccessful = attempts_to_contact_unsuccessful * 100
   )
-
 ```
 
 ```{r}
@@ -409,7 +407,7 @@ us_data_DQ_proportion <- byrace %>%
 
 The chi-square indicated that there was a statistically significant association between children being Black/African American or White and them leaving EI due to being disqualified nationally. The chi-square test indicated, X-squared (222556.00, N = 2,088,058), *p* \< 2.2e-16 or 0.0000000000000002 (*p* \< .001).
 
-Because whether or not children were Black/African American or White and whether they were likely to be disqualified from EI services due to "Attempts to Contact Unsuccessful" were both binary variables, an odds ratio was computed. 
+Because whether or not children were Black/African American or White and whether they were likely to be disqualified from EI services due to "Attempts to Contact Unsuccessful" were both binary variables, an odds ratio was computed.
 
 A 2x2 contingency table was created and analyzed, and the odds ratio was calculated to determine the relative likelihood of the students being disqualified between the two groups. The odds of Black infants and toddlers being disqualified from EI services due to "attempts to contact unsuccessful" were significantly higher than those for White infants and toddlers, with an odds ratio of **2.46** (95% CI \[2.43, 2.48\]). This indicates that Black students were approximately 2.46 times more likely than White students to be disqualified from EI services for this reason.
 
@@ -421,6 +419,7 @@ us_data_wide_DQ_BLWH <- us_data_attempts_BLWH %>%
 
 us_data_wide_DQ_BLWH_nototal <- us_data_wide_DQ_BLWH %>% 
   select(-exit_total)
+
 ```
 
 ```{r}
@@ -432,6 +431,7 @@ us_dq_BLWH_matrix <- matrix(
     c("attempts_to_contact_unsuccessful", "Other"), 
     c("Black", "White")
   ))
+
 ```
 
 Cohen's *h* was calculated to evaluate the effect size of the analysis**.** The result indicated a small to medium effect size, *h* = 0.25. However, even though effect size shows the magnitude of the difference, it is not necessarily considered to be a direct indication of the importance of the findings (Morgan et al., 2020).
@@ -449,6 +449,7 @@ p2 <- white_unsuccessful / white_total
 
 h <- 2 * (asin(sqrt(p1)) - asin(sqrt(p2)))
 
+
 # h 
 ```
 
@@ -460,7 +461,7 @@ First of all, we have to remember that race is not a predictive factor for outco
 
 In addition, as @crenshaw established in her seminal work, we must take the framework of Intersectionality when conducting a research. This type of oversimplified statistical analysis can contribute to reinforce the status-quo where race is quickly to be blamed, rather than the complex environments and multiple layers of identities that members of marginalized communities live in.
 
-In addition, researchers have argued that quantitative methods are inequitable, as "the history of quant methods is inseparable from eugenics movement" (p. 4, Castillo & Strunk, 2024) and that it stems from and reinforces inequity. QuantCrit philosophy are based and expands on the centrality of racism and the lack of neutrality in numbers and categories. Going forward, it would be extremely important to remember these tenets and to approach data collection, categorization and analysis with equity and justice as the central philosophy.
+Last but not least, researchers have argued that quantitative methods are inequitable, as "the history of quant methods is inseparable from eugenics movement" (p. 4, Castillo & Strunk, 2024) and that it stems from and reinforces inequity. QuantCrit philosophy are based and expands on the centrality of racism and the lack of neutrality in numbers and categories. Going forward, it would be extremely important to remember these tenets and to approach data collection, categorization and analysis with equity and justice as the central philosophy.
 
 \newpage
 
