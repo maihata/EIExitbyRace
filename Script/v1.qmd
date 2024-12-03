@@ -57,7 +57,8 @@ exit_categories <- import(here("Data","exit_categories.xlsx")) %>%
 ```
 
 ```{r}
-kable(exit_categories, caption = "Table of Exit Reasons")
+kable(exit_categories, caption = "Table of Exit Reasons") %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
 ```
 
 These ten reasons were collapsed into six categories based on the scope of the study and for logistical reasons. For example, "Deceased" is beyond the scope of this study; one reason is not used in Oregon; multiple codes were similar in nature to each other:
@@ -144,6 +145,15 @@ omni_statistic <- chi_omni$statistic
 
 # Created two objective that show percentage and total exits - 1127
 # Figured out how to pull percentage, need to check the correctness - 1201
+# Added area_by_race, but the computed figures are different from what Maiko put in the results - 1202
+
+area_by_race <- byrace %>% 
+  group_by(race) %>% 
+  summarize(
+    total_exit = sum(exiting_total2),
+    .groups = "drop") %>% 
+  mutate(percentage = round(total_exit/sum(total_exit),
+                            digits = 4)*100)
 
 other_by_race <- byrace %>% 
   filter(area == "US and Outlying Areas") %>% 
@@ -253,6 +263,7 @@ us_data_wide <- us_data_wide %>%
 
 ```{r}
 # figure 1 continues 
+
 ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
   geom_bar(stat = "identity", fill = "gray43") +
   labs(
@@ -261,6 +272,21 @@ ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
     y = "Percentage of Exit by Race"
   ) +
   theme_minimal()
+
+# rotate the x axis text labels and added data labels with %
+
+# ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
+#   geom_col(stat = "identity", fill = "gray43", position = 'dodge') +
+#    geom_text(aes(label = attempts_to_contact_unsuccessful),
+#              position = position_dodge(0.9),
+#              vjust = -0.3)+
+#   labs(
+#     title = "Figure 1: Unsuccessful Contacts/DQ (U.S.)", 
+#     x = "Race", 
+#     y = "Percentage of Exit by Race (%)"
+#   ) +
+#   theme_minimal()+
+#   theme(axis.text.x = element_text(angle = 45))
 
 ```
 
@@ -368,6 +394,7 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
 
 ```{r}
 # figure 2 continues 
+# rotate x axis text labels - 1202
  ggplot(oregon_data_wide_DQ, 
         aes(x = race, y = attempts_to_contact_unsuccessful)) +
   geom_col(stat = "identity", fill = "gray24", position = 'dodge') +
@@ -379,7 +406,8 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
     x = "Race", 
     y = "Percentage of Exit by Race"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45))
  
  # print(oregon_data_wide_DQ) 
 ```
@@ -393,6 +421,20 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
 #  summarize(exit_total = sum(exiting_total2), 
 #            attempts_to_contact_unsuccessful = 
 # sum(attempts_to_contact_unsuccessful))
+
+# Filtered BL and WH - 1202
+# Is the chisq_test correct? 
+
+# us_data_DQ <- byrace %>%
+#  filter(area == "US and Outlying Areas", race %in% c("BL", "WH")) %>% 
+#  group_by(race) %>%
+#  summarize(exit_total = sum(exiting_total2),
+#            attempts_to_contact_unsuccessful =
+# sum(attempts_to_contact_unsuccessful))
+# 
+# chisq_dq <- chisq.test(us_data_DQ[, -1])
+
+
 ```
 
 ```{r}
@@ -468,8 +510,7 @@ Last but not least, researchers have argued that quantitative methods are inequi
 
 # References (DOESN'T SHOW CORRECTLY because mixing the insert citation and just typed ones)
 
-Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424>
-Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424> \>\>\>\>\>\>\> origin/main
+Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424> Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424> \>\>\>\>\>\>\> origin/main
 
 Castillo, W. & Strunk, K. (2024, November 15). How to QuantCrit \[PowerPoint slides\]. <https://www.sree.org/critical-perspectives>
 
