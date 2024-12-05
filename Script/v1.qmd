@@ -421,16 +421,16 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
 # sum(attempts_to_contact_unsuccessful))
 
 # Filtered BL and WH - 1202
-# Is the chisq_test correct? 
+# Is the chisq_test correct? Need to check this
 
-# us_data_DQ <- byrace %>%
-#  filter(area == "US and Outlying Areas", race %in% c("BL", "WH")) %>% 
-#  group_by(race) %>%
-#  summarize(exit_total = sum(exiting_total2),
-#            attempts_to_contact_unsuccessful =
-# sum(attempts_to_contact_unsuccessful))
-# 
-# chisq_dq <- chisq.test(us_data_DQ[, -1])
+us_data_DQ <- byrace %>%
+ filter(area == "US and Outlying Areas", race %in% c("BL", "WH")) %>%
+ group_by(race) %>%
+ summarize(exit_total = sum(exiting_total2),
+           attempts_to_contact_unsuccessful =
+sum(attempts_to_contact_unsuccessful))
+
+chisq_dq <- chisq.test(us_data_DQ[, -1])
 
 
 ```
