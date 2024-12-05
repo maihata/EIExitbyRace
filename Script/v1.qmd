@@ -85,10 +85,6 @@ We then analyzed the association between the exit reason, "Attempts to Contact U
 
 # Results
 
-The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately 4.41% of the children were Black/African American, while 50.51% children were reported as being White. This shows possible disproportional representation of children in each racial category, as census showed that during these years, Black/African American and White children represented approximately 14% for Black/African American children under the age of 18 and between 52% to 49 % for White children nationally (The Annie E. Casey Foundation, 2024).
-
-The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001).
-
 ```{r}
 # I tried to inline code here, but didn't work: 
 # (The chi-square test statistic is `r round(omni_statistic, 2)`, with a p-value of `r format.pval(omni_p_value, digit = 3)`.
@@ -174,7 +170,9 @@ oregon_by_race <- byrace %>%
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
 ```
 
-The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately `r other_by_race %>% filter(race == "BL") %>% pull(percentage)`% of the children were Black/African American, while `r other_by_race %>% filter(race == "WH") %>% pull(percentage)` children were reported as being White. The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = 52218, *p* \< 2.2e-16 or 0.00000000000000022 (*p* \< .001). **The chi-square test statistic is `r format(round(omni_statistic, digits = 2), scientific = FALSE)`, with a p-value of `r ifelse(omni_p_value < 0.001, "< 0.001", round(omni_p_value, 3))`**
+The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately `r area_by_race %>% filter(race == "BL") %>% pull(percentage)`% of the children were Black/African American, while `r area_by_race %>% filter(race == "WH") %>% pull(percentage)`% of the children were reported as being White. This shows possible disproportional representation of children in each racial category, as census showed that during these years, Black/African American and White children represented approximately 14% for Black/African American children under the age of 18 and between 52% to 49 % for White children nationally (The Annie E. Casey Foundation, 2024).
+
+The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = `r format(round(omni_statistic, digits = 2), scientific = FALSE)`, with a p-value of `r ifelse(omni_p_value < 0.001, "< 0.001", round(omni_p_value, 3))`
 
 ```{r}
 # I tried to inline code here, but didn't work: 
@@ -493,7 +491,6 @@ h <- 2 * (asin(sqrt(p1)) - asin(sqrt(p2)))
 
 
 # h 
-h
 ```
 
 # Discussion
