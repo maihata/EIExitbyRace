@@ -1,7 +1,12 @@
 ---
 title: "Final Project"
 author: "Maiko Hata & Michelle Cui"
-format: pdf
+format: 
+  pdf:
+    mainfont: "Times New Roman"
+    sansfont: "Times New Roman"
+fig-width: 7
+fig-height: 4
 csl: apa.csl
 execute: 
   eval: true 
@@ -57,7 +62,9 @@ exit_categories <- import(here("Data","exit_categories.xlsx")) %>%
 ```
 
 ```{r}
-kable(exit_categories, caption = "Table of Exit Reasons") %>% 
+kable(exit_categories, 
+      caption = "Table of Exit Reasons",
+      col.names = c('Exit Reasons','Exit Category Codes')) %>% 
   kable_styling(bootstrap_options = "striped", full_width = F, position = "left")
 ```
 
@@ -263,28 +270,19 @@ us_data_wide <- us_data_wide %>%
 # figure 1 continues 
 
 ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
-  geom_bar(stat = "identity", fill = "gray43") +
+  geom_col(stat = "identity", fill = "gray43", position = 'dodge') +
+   geom_text(aes(label = attempts_to_contact_unsuccessful),
+             position = position_dodge(0.9),
+             hjust = -0.05,
+             size = 2)+
   labs(
     title = "Figure 1: Unsuccessful Contacts/DQ (U.S.)", 
     x = "Race", 
-    y = "Percentage of Exit by Race"
+    y = "Percentage of Exit by Race (%)"
   ) +
-  theme_minimal()
-
-# rotate the x axis text labels and added data labels with %
-
-# ggplot(us_data_wide, aes(x = race, y = attempts_to_contact_unsuccessful)) +
-#   geom_col(stat = "identity", fill = "gray43", position = 'dodge') +
-#    geom_text(aes(label = attempts_to_contact_unsuccessful),
-#              position = position_dodge(0.9),
-#              vjust = -0.3)+
-#   labs(
-#     title = "Figure 1: Unsuccessful Contacts/DQ (U.S.)", 
-#     x = "Race", 
-#     y = "Percentage of Exit by Race (%)"
-#   ) +
-#   theme_minimal()+
-#   theme(axis.text.x = element_text(angle = 45))
+  theme_classic()+
+  scale_x_discrete(labels = c("Alaska Native/American Indian", "Asian", "Black/African American", "Hispanic", "Multiracial", "Pacific Islander", "White"))+
+  coord_flip()
 
 ```
 
@@ -398,14 +396,16 @@ oregon_data_wide_DQ <- oregon_data_wide %>%
   geom_col(stat = "identity", fill = "gray24", position = 'dodge') +
    geom_text(aes(label = attempts_to_contact_unsuccessful),
              position = position_dodge(0.9),
-             vjust = -0.3) +
+             hjust = -0.3,
+             size = 2.2) +
   labs(
     title = "Figure 2: Unsuccessful Contacts/DQ (Oregon)", 
     x = "Race", 
     y = "Percentage of Exit by Race"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45))
+  theme_classic() +
+  scale_x_discrete(labels = c("Alaska Native/American Indian", "Asian", "Black/African American", "Hispanic", "Multiracial", "Pacific Islander", "White"))+
+  coord_flip()
  
  # print(oregon_data_wide_DQ) 
 ```
