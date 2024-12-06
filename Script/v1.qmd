@@ -303,24 +303,6 @@ us_data_attempts <- us_data_attempts %>%
 ```
 
 ```{r}
-# DUPLICATE CODE SEE ABOVE 
-# mutated a column grand_total for all the kiddos exited 
-us_data_attempts <- us_data_attempts %>% 
-  mutate(grand_total = sum(exit_total), na.rm = TRUE)
-```
-
-```{r}
-# DUPLICATE CODE SEE ABOVE 
-# now, divide the attempts_to_contact_unsuccessful by grand_total x 100 for % of each race represented in relation to the exit total between 2013-2022. 
-us_data_attempts <- us_data_attempts %>% 
-  mutate(
-    grand_total = sum(exit_total, na.rm = TRUE), 
-    portion = (exit_total / grand_total) * 100
-  )
-
-```
-
-```{r}
 # YAY 12/1 
 # chi_dq_BLWH_result <- chisq.test(us_data_attempts_BLWH[, 2:3])
 # chi_dq_BLWH_result
