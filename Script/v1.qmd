@@ -15,7 +15,9 @@ execute:
   warning: false
 editor: visual
 engine: knitr
-bibliography: references.bib
+bibliography: 
+- references.bib
+- grateful-refs.bib
 ---
 
 # Introduction
@@ -56,7 +58,8 @@ library(epitools)
 library(readxl)
 library(pwr)
 library(rcompanion)
-
+library(grateful)
+cite_packages(out.dir = ".")
 ```
 
 ```{r}
@@ -541,3 +544,10 @@ Morgan, P. L., Farkas, G., Hillemeier, M. M., & Maczuga, S. (2012). Are minority
 Romano, S.D. (2006). Historical perspectives. In G. M. Foley & J.D. Hochman (Eds.), *Mental health in early intervention: Achieving unity in principles and practice* (pp. 33-58). Baltimore: Paul H. Brookes Publishing Company.
 
 Silverstein, J. (2015, April 15). Genes don’t cause racial-health disparities, society does. The Atlantic. <https://www.theatlantic.com/health/archive/2015/04/genes-dont-cause-racial-health-disparities-society-does/389637/> 
+
+\newpage
+
+```{r}
+cite_packages(output = "paragraph", out.dir = tempdir())
+```
+
