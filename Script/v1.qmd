@@ -20,6 +20,10 @@ bibliography:
 - grateful-refs.bib
 ---
 
+# Abstract 
+
+The Individuals with Disabilities Education Act (IDEA) Part C supports early intervention (EI) services for children aged zero to two with developmental delays and/or disabilities. Despite federal mandates to serve marginalized communities, racially minoritized children have been underrepresented in EI services. This project examined national and state-level patterns of EI exit from 2013-2022 focusing on disqualification due to "Attempts to Contact Family Unsuccessful". Descriptive statistics such as chi-square and odds ratio revealed that Black/African American children were 2.46 times more likely than White children to be disqualified nationally for this reason.
+
 # Introduction
 
 The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant program that supports states in providing Early Intervention (EI) services for children zero to two who experience developmental delays and/or disabilities (Early Childhood Technical Assistance Center, 2023). These EI services incorporate family-centered practices, aiming to support caregivers' understanding of their children to provide the most effective support for their development (Romano, 2006). However, racially and linguistically minoritized children are less likely than White, English speaking monolingual children to receive EI services (Morgan, et al., 2012) despite federal mandates to ensure the most marginalized, hard-to-reach communities are served.
@@ -459,7 +463,6 @@ Cohen's *h* was calculated to evaluate the effect size of the analysis**.** The 
 # white_total <- 1572263
 ```
 
-
 ```{r}
 # Cohen's h wrong formula 
 # p1 <- (black_unsuccessful / black_total)
@@ -480,7 +483,6 @@ Cohen's *h* was calculated to evaluate the effect size of the analysis**.** The 
 # h
 ```
 
-
 ```{r}
 # Cameron helped me make sure
 
@@ -500,7 +502,6 @@ Cohen's *h* was calculated to evaluate the effect size of the analysis**.** The 
 # h <- ES.h()
 ```
 
-
 ```{r}
 # CITE ALL THE PACKAGES I USE 
 # citation("rcompanion")
@@ -514,7 +515,7 @@ First of all, we have to remember that race is not a predictive factor for outco
 
 In addition, as Crenshaw (1989) established in her seminal work, we must take the framework of Intersectionality when conducting a research. This type of oversimplified statistical analysis can contribute to reinforce the status-quo where race is quickly to be blamed, rather than the complex environments and multiple layers of identities that members of marginalized communities live in.
 
-The smaller disparity between racial groups in Oregon in terms of disqualification rate could be due to the state's limited diversity, meaning we simply don't have enough data. This makes it challenging to conduct quantitative studies on marginalized populations, even though research  is so urgently needed for that very reason.
+The smaller disparity between racial groups in Oregon in terms of disqualification rate could be due to the state's limited diversity, meaning we simply don't have enough data. This makes it challenging to conduct quantitative studies on marginalized populations, even though research is so urgently needed for that very reason.
 
 Last but not least, researchers have argued that quantitative methods are inequitable, as "the history of quant methods is inseparable from eugenics movement" (p. 4, Castillo & Strunk, 2024) and that it stems from and reinforces inequity. QuantCrit philosophy are based and expands on the centrality of racism and the lack of neutrality in numbers and categories. Going forward, it would be extremely important to remember these tenets and to approach data collection, categorization and analysis with equity and justice as the central philosophy.
 
@@ -525,13 +526,13 @@ Last but not least, researchers have argued that quantitative methods are inequi
 
 ```
 
-# References 
+# References
 
-Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424> 
+Annie E. Casey Foundation. (2024, July). Child population by race and ethnicity. KIDS COUNT Data Center. <https://datacenter.aecf.org/data/tables/103-child-population-by-race-and-ethnicity#detailed/1/any/false/1095,2048,574,1729,37,871,870,573,869,36/72,66,67,8367,69,70,71,12/423,424>
 
 Castillo, W. & Strunk, K. (2024, November 15). How to QuantCrit \[PowerPoint slides\]. <https://www.sree.org/critical-perspectives>
 
-Crenshaw, K. (1989). Demarginalizing the intersection of race and sex: A Black feminist critique of antidiscrimination doctrine, feminist theory and antiracist politics. University of Chicago Legal Forum, 1989(1), 139-167. 
+Crenshaw, K. (1989). Demarginalizing the intersection of race and sex: A Black feminist critique of antidiscrimination doctrine, feminist theory and antiracist politics. University of Chicago Legal Forum, 1989(1), 139-167.
 
 Early Childhood Technical Assistance Center \[ecta\], (2023, October 6). *Part C of IDEA*. ecta. <https://ectacenter.org/partc/partc.asp>
 
@@ -540,6 +541,8 @@ Individuals with Disabilities Education Act, 20 U.S.C. § 1400 (2004).
 Morgan, G.A., Barrett, K.C., Leech, N.L., & Gloeckner, G.W. (2020). *IBM SPSS for introductory statistics: Use and interpretation.* Routledge.
 
 Morgan, P. L., Farkas, G., Hillemeier, M. M., & Maczuga, S. (2012). Are minority children disproportionately represented in Early Intervention and Early Childhood Special Education? Educational Researcher, 41(9), 339–351. https://doi.org/10.3102/0013189X12459678
+
+OpenAI. (2024). *ChatGPT* \[Large language model\]. Provided code assistance. Retrieved from <https://chat.openai.com/>
 
 Romano, S.D. (2006). Historical perspectives. In G. M. Foley & J.D. Hochman (Eds.), *Mental health in early intervention: Achieving unity in principles and practice* (pp. 33-58). Baltimore: Paul H. Brookes Publishing Company.
 
@@ -550,4 +553,3 @@ Silverstein, J. (2015, April 15). Genes don’t cause racial-health disparities,
 ```{r}
 cite_packages(output = "paragraph", out.dir = tempdir())
 ```
-
