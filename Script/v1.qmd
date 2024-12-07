@@ -20,7 +20,7 @@ bibliography:
 - grateful-refs.bib
 ---
 
-# Abstract 
+# Abstract
 
 The Individuals with Disabilities Education Act (IDEA) Part C supports early intervention (EI) services for children aged zero to two with developmental delays and/or disabilities. Despite federal mandates to serve marginalized communities, racially minoritized children have been underrepresented in EI services. This project examined national and state-level patterns of EI exit from 2013-2022 focusing on disqualification due to "Attempts to Contact Family Unsuccessful". Descriptive statistics such as chi-square and odds ratio revealed that Black/African American children were 2.46 times more likely than White children to be disqualified nationally for this reason.
 
@@ -181,7 +181,7 @@ oregon_by_race <- byrace %>%
   mutate(percentage = round(total_exit/sum(total_exit), digits = 3)*100)
 ```
 
-The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately `r area_by_race %>% filter(race == "BL") %>% pull(percentage)`% of the children were Black/African American, while `r area_by_race %>% filter(race == "WH") %>% pull(percentage)`% of the children were reported as being White. This shows a possible disproportional representation of children, as census showed that during these years, Black/African American and White children represented approximately 14% for Black/African American children under the age of 18 and between 52% to 49 % for White children nationally (The Annie E. Casey Foundation, 2024).
+The initial exploration included exit data from 3,310,559 children who exited the EI services between 2013 and 2022 nationally. Approximately `r area_by_race %>% filter(race == "BL") %>% pull(percentage)`% of the children were Black/African American, while `r area_by_race %>% filter(race == "WH") %>% pull(percentage)`% of the children were reported as being White. This shows a possible disproportionate representation of children, as census showed that during these years, Black/African American and White children represented approximately 14% for Black/African American children under the age of 18 and between 52% to 49 % for White children nationally (The Annie E. Casey Foundation, 2024). When looking at children under the age of six in 2022, the disparities widen: White children represented only 46.5% nationally, while Black/African American children represented 12.7% of the children under the age of 6 (Schneider & Gibbs, 2023).
 
 The chi-square omnibus test indicated that there was a statistically significant association between children's race and their exit reasons, X-squared (30, N = 3,310,559) = `r format(round(omni_statistic, digits = 2), scientific = FALSE)`, with a p-value of `r ifelse(omni_p_value < 0.001, "< 0.001", round(omni_p_value, 3))`
 
@@ -545,6 +545,8 @@ Morgan, P. L., Farkas, G., Hillemeier, M. M., & Maczuga, S. (2012). Are minority
 OpenAI. (2024). *ChatGPT* \[Large language model\]. Provided code assistance. Retrieved from <https://chat.openai.com/>
 
 Romano, S.D. (2006). Historical perspectives. In G. M. Foley & J.D. Hochman (Eds.), *Mental health in early intervention: Achieving unity in principles and practice* (pp. 33-58). Baltimore: Paul H. Brookes Publishing Company.
+
+Schneider, A. & Gibbs, H. (2023, December 14). Data dashboard: An overview of child care and early learning in the United States. The Center for American Progress. <https://www.americanprogress.org/article/data-dashboard-an-overview-of-child-care-and-early-learning-in-the-united-states/>
 
 Silverstein, J. (2015, April 15). Genes don’t cause racial-health disparities, society does. The Atlantic. <https://www.theatlantic.com/health/archive/2015/04/genes-dont-cause-racial-health-disparities-society-does/389637/> 
 
