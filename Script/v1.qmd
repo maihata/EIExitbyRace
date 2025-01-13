@@ -1,6 +1,6 @@
 ---
-title: "Final Project"
-author: "Maiko Hata & Michelle Cui"
+title: "EI Exit Analysis for Dissertation"
+author: "Maiko Hata"
 format: 
   pdf:
     mainfont: "Times New Roman"
@@ -22,22 +22,17 @@ bibliography:
 
 # Abstract
 
-The Individuals with Disabilities Education Act (IDEA) Part C supports early intervention (EI) services for children aged zero to two with developmental delays and/or disabilities. Despite federal mandates to serve marginalized communities, racially minoritized children have been underrepresented in EI services. This project examined national and state-level patterns of EI exit from 2013-2022 focusing on disqualification due to "Attempts to Contact Family Unsuccessful". Descriptive statistics such as chi-square and odds ratio revealed that Black/African American children were 2.46 times more likely than White children to be disqualified nationally for this reason.
+xxx
 
 # Introduction
 
-The Individuals with Disabilities Education Act (IDEA) Part C is a federal grant program that supports states in providing Early Intervention (EI) services for children zero to two who experience developmental delays and/or disabilities (Early Childhood Technical Assistance Center, 2023). These EI services incorporate family-centered practices, aiming to support caregivers' understanding of their children to provide the most effective support for their development (Romano, 2006). However, racially and linguistically minoritized children are less likely than White, English speaking monolingual children to receive EI services (Morgan, et al., 2012) despite federal mandates to ensure the most marginalized, hard-to-reach communities are served.
+xxx
 
-The IDEA Section 618 requires that data is collected on children with an active IFSP who stopped receiving EI services (U.S. Department of Education \[DOE\], 2024). Recent data revealed that racially and/or linguistically marginalized infants and toddlers are much more likely to leave EI services via disqualification due to non-response to agencies’ outreach efforts after being made eligible.
-
-The purpose of this project is to explore the patterns in which families from racially and/or linguistically marginalized communities leave EI services by examining extant data on EI exit between 2013-2022. The data was obtained from the Office of Special Education Services (OSEP, 2024). The research questions are as follows:
-
--   Are there associations between children's race and their reasons for exiting EI services nationally, as analyzed through descriptive statistics including chi-square tests and odds ratio analysis?
--   What are the associations between children's race (Black/African American and White) and being disqualified due to "Attempts to Contact Unsuccessful"? What are the odds ratio for being disqualified for this reason between the two racial groups?
+xxx
 
 # **Methods**
 
-**Independent variables (IV)**: Student' race served as the independent variable (IV), while exit reason served as the dependent variable (DV). There were seven racial categories serving as IVs (Alaska Native/American Indian, Asian, Black/African American, Hispanic, Multiracial, Pacific Islander, White). We briefly discussed collapsing racial categories in order to make the analysis more powerful (as Maiko will also be working on state-level data with cells with "0"s as certain populations are very underrepresented). However, we decided against doing so as this would likely obscure the results, as there are large disparities within BIPOC populations when we look at their exit reasons.
+**Independent variables (IV)**: xxx
 
 **Dependent variables (DV)**: As you can see in Table 1, there are ten exit categories under three general exit reason “umbrellas” (Hansen et al., 2016):
 
@@ -72,6 +67,16 @@ exit_categories <- import(here("Data","exit_categories.xlsx")) %>%
 ```
 
 ```{r}
+oregon_by_lang <- import(here("Data", "OregonByLang.xlsx")) %>% 
+  clean_names()
+```
+
+```{r}
+oregon_by_lang
+```
+
+```{r}
+# This is just a table, no analysis is ran. But it shows in Times New Roman - thanks Michelle :) 
 kable(exit_categories, 
       caption = "Table of Exit Reasons",
       col.names = c('Exit Reasons','Exit Category Codes')) %>% 
@@ -87,18 +92,18 @@ These ten reasons were collapsed into six reasons based on the scope of this stu
 -   Part B eligibility not determined
 -   Part B eligible
 
-**Preparatory work**: We prepared the data in a following manner:
+**Preparatory work**: I prepared the data in a following manner:
 
 1.  Created an Excel sheet from the national and Oregon data sets
 2.  Imported Excel sheet into RStudio
 3.  Collapsed/removed DVs
 4.  Collapsed data from multiple years into one aggregated data by race
 
-**Data Analysis**: We used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons. Chi-square tests tell us if we can be confident that differences in counts and expected counts are not due to chance. In other words, chi-square tests can be used to evaluate if there is a statistically significant relationship between two dichotomous or nominal variable. However, they are not able to indicate the strength or the direction of the relationship (Morgan et al., 2020).
+**Data Analysis**: I used chi-square goodness of fit test to understand associations between children's race and their EI exit reasons. Chi-square tests tell us if I can be confident that differences in counts and expected counts are not due to chance. In other words, chi-square tests can be used to evaluate if there is a statistically significant relationship between two dichotomous or nominal variable. However, they are not able to indicate the strength or the direction of the relationship (Morgan et al., 2020).
 
-First, we ran descriptive analysis of the national data set as an omnibus test. For this, we used foundational statistical functions and chi-square to test our null-hypothesis; there is no associations between children's race and their exit reasons.
+First, I ran descriptive analysis of the national data set as an omnibus test. For this, I used foundational statistical functions and chi-square to test our null-hypothesis; there is no associations between children's race and their exit reasons.
 
-We then analyzed the association between the exit reason, "Attempts to Contact Unsuccessful", using similar analysis. For this portion, we looked at the association between two racial categories, Black/African American and White infants/toddler groups, with "Attempts to Contact Unsuccessful". We created 2x2 table for this analysis, complete with the total number of exits. This was used to analyze the odd ratio and Cohen's \*h\*. Odds ratio are commonly used for reporting the odds of one outcome between two independent groups (Morgan, et al., 2020).
+I then analyzed the association between the exit reason, "Attempts to Contact Unsuccessful", using similar analysis. For this portion, we looked at the association between two racial categories, Black/African American and White infants/toddler groups, with "Attempts to Contact Unsuccessful". We created 2x2 table for this analysis, complete with the total number of exits. This was used to analyze the odd ratio and Cohen's \*h\*. Odds ratio are commonly used for reporting the odds of one outcome between two independent groups (Morgan, et al., 2020).
 
 # Results
 
