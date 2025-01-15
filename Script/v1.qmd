@@ -72,10 +72,6 @@ oregon_by_lang <- import(here("Data", "OregonByLang.xlsx")) %>%
 ```
 
 ```{r}
-oregon_by_lang
-```
-
-```{r}
 # This is just a table, no analysis is ran. But it shows in Times New Roman - thanks Michelle :) 
 kable(exit_categories, 
       caption = "Table of Exit Reasons",
